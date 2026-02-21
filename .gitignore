@@ -3,6 +3,8 @@ node_modules/
 npm-debug.log
 yarn-error.log
 venv/
+_pycache_
+venv
 # Environment variables
 .env
 .env.local
