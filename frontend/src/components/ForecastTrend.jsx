@@ -3,6 +3,7 @@
  * Shows emission trend with forecast prediction
  */
 
+import { useState } from 'react';
 import {
   AreaChart,
   Area,
@@ -16,21 +17,94 @@ import {
 import { formatEmission } from '../utils/formatting';
 
 /**
- * Generate forecast data for next 6 months
+ * Generate hourly forecast data (past 12 hours, next 12 hours)
  */
-function generateForecastData(currentEmission, monthsAhead = 6) {
+function generateHourlyForecastData(currentEmission) {
   const historyData = [];
+  const forecastData = [];
   const currentDate = new Date();
-  
-  // If current emission is 0 or very low, use defaults
-  const baseEmission = Math.max(currentEmission, 0.1);
+  // Use a reasonable baseline for demo if no emission data exists
+  const baseEmission = Math.max(currentEmission || 50, 50);
 
-  // Generate historical data (past 6 months) showing downward trend
-  for (let i = 5; i >= 0; i--) {
+  // Past 12 hours
+  for (let i = 11; i >= 0; i--) {
+    const date = new Date(currentDate);
+    date.setHours(date.getHours() - i);
+    const trend = 1 + (i * 0.02);
+    historyData.push({
+      time: date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+      emission: Math.max(baseEmission / 30 * trend, 0),
+      isForecast: false,
+    });
+  }
+
+  // Next 12 hours
+  for (let i = 1; i <= 12; i++) {
+    const date = new Date(currentDate);
+    date.setHours(date.getHours() + i);
+    const reductionFactor = Math.pow(0.98, i);
+    forecastData.push({
+      time: date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+      emission: Math.max(baseEmission / 30 * reductionFactor, 0),
+      isForecast: true,
+    });
+  }
+
+  return [...historyData, ...forecastData];
+}
+
+/**
+ * Generate daily forecast data (past 30 days, next 30 days)
+ */
+function generateDailyForecastData(currentEmission) {
+  const historyData = [];
+  const forecastData = [];
+  const currentDate = new Date();
+  // Use a reasonable baseline for demo if no emission data exists
+  const baseEmission = Math.max(currentEmission || 50, 50);
+
+  // Past 30 days
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date(currentDate);
+    date.setDate(date.getDate() - i);
+    const trend = 1 + (i * 0.01);
+    historyData.push({
+      day: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      emission: Math.max(baseEmission / 2 * trend, 0),
+      isForecast: false,
+    });
+  }
+
+  // Next 30 days
+  for (let i = 1; i <= 30; i++) {
+    const date = new Date(currentDate);
+    date.setDate(date.getDate() + i);
+    const reductionFactor = Math.pow(0.97, i / 10);
+    forecastData.push({
+      day: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+      emission: Math.max(baseEmission / 2 * reductionFactor, 0),
+      isForecast: true,
+    });
+  }
+
+  return [...historyData, ...forecastData];
+}
+
+/**
+ * Generate monthly forecast data (past 12 months, next 6 months)
+ */
+function generateMonthlyForecastData(currentEmission) {
+  const historyData = [];
+  const forecastData = [];
+  const currentDate = new Date();
+  // Use a reasonable baseline for demo if no emission data exists
+  const baseEmission = Math.max(currentEmission || 50, 50);
+
+  // Past 12 months
+  for (let i = 11; i >= 0; i--) {
     const date = new Date(currentDate);
     date.setMonth(date.getMonth() - i);
-    // Show trend of reducing emissions over time
-    const trend = 1 + (i * 0.05); // 5% increase per step going backwards
+    const trend = 1 + (i * 0.05);
     historyData.push({
       month: date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
       emission: Math.max(baseEmission * trend, 0),
@@ -38,12 +112,10 @@ function generateForecastData(currentEmission, monthsAhead = 6) {
     });
   }
 
-  // Generate forecast data (next 6 months) - optimistic reduction
-  const forecastData = [];
-  for (let i = 1; i <= monthsAhead; i++) {
+  // Next 6 months
+  for (let i = 1; i <= 6; i++) {
     const date = new Date(currentDate);
     date.setMonth(date.getMonth() + i);
-    // Show gradual reduction (3% per month improvement)
     const reductionFactor = Math.pow(0.97, i);
     forecastData.push({
       month: date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
@@ -77,17 +149,67 @@ function CustomAreaTooltip({ active, payload }) {
 }
 
 export function ForecastTrend({ totalEmission = 0, targetEmission = 0 }) {
-  const data = generateForecastData(totalEmission);
+  const [timePeriod, setTimePeriod] = useState('monthly'); // hourly, daily, monthly
+
+  // Generate data based on selected time period
+  let data;
+  let dataKeyName;
+  
+  switch (timePeriod) {
+    case 'hourly':
+      data = generateHourlyForecastData(totalEmission);
+      dataKeyName = 'time';
+      break;
+    case 'daily':
+      data = generateDailyForecastData(totalEmission);
+      dataKeyName = 'day';
+      break;
+    case 'monthly':
+    default:
+      data = generateMonthlyForecastData(totalEmission);
+      dataKeyName = 'month';
+      break;
+  }
 
   // Find the forecast line index (where forecast starts)
   const forecastStartIndex = data.findIndex((d) => d.isForecast);
 
+  const periodLabels = {
+    hourly: { label: 'Hourly', key: 'time', period: '12 hours history | 12 hours forecast' },
+    daily: { label: 'Daily', key: 'day', period: '30 days history | 30 days forecast' },
+    monthly: { label: 'Monthly', key: 'month', period: '12 months history | 6 months forecast' },
+  };
+
   return (
     <div className="card-base">
-      <h2 className="text-2xl font-bold text-text-primary mb-6 flex items-center gap-2">
-        <span>📈</span>
-        <span>Emission Forecast Trend</span>
-      </h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold text-text-primary flex items-center gap-2">
+          <span>📈</span>
+          <span>Emission Forecast Trend</span>
+        </h2>
+      </div>
+
+      {/* Time Period Toggle Buttons */}
+      <div className="flex gap-3 mb-6">
+        {['hourly', 'daily', 'monthly'].map((period) => (
+          <button
+            key={period}
+            onClick={() => setTimePeriod(period)}
+            className={`px-5 py-2 rounded-lg font-semibold transition-all ${
+              timePeriod === period
+                ? 'bg-accent-emerald text-white shadow-lg'
+                : 'bg-primary-darker text-text-primary border border-border-color hover:border-accent-emerald'
+            }`}
+          >
+            {periodLabels[period].label}
+          </button>
+        ))}
+      </div>
+
+      {/* Period Info */}
+      <div className="text-xs text-text-secondary mb-4 px-3 py-2 bg-primary-darker rounded-lg">
+        {periodLabels[timePeriod].period}
+      </div>
 
       {data.length > 0 ? (
         <div className="space-y-4">
@@ -105,7 +227,7 @@ export function ForecastTrend({ totalEmission = 0, targetEmission = 0 }) {
                 vertical={false}
               />
               <XAxis
-                dataKey="month"
+                dataKey={dataKeyName}
                 stroke="#94A3B8"
                 tick={{ fontSize: 12 }}
               />

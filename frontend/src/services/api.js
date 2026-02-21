@@ -197,6 +197,20 @@ export const updateSupplyChainNode = async (nodeId, nodeData) => {
   }
 };
 
+/**
+ * Analyze route intelligence for Maharashtra cities
+ * @param {Object} routeData - From and toLocation
+ */
+export const analyzeRouteIntelligence = async (routeData) => {
+  try {
+    const response = await apiClient.post('/supply-chain/route/analyze', routeData);
+    return response.data;
+  } catch (error) {
+    console.error('Error analyzing route:', error);
+    throw error;
+  }
+};
+
 // ============================================================
 // ANALYSIS ENDPOINTS
 // ============================================================
@@ -281,6 +295,54 @@ export const createOptimization = async (optimizationData) => {
     return response.data;
   } catch (error) {
     console.error('Error creating optimization:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get Gemini AI-generated optimizations for a product
+ * @param {String} productId - Product ID
+ */
+export const getGeminiOptimizations = async (productId) => {
+  try {
+    const response = await apiClient.get(`/optimizations/${productId}/gemini`);
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 404) {
+      return { success: true, data: [], source: 'gemini-ai' };
+    }
+    console.error('Error fetching Gemini optimizations:', error);
+    throw error;
+  }
+};
+
+/**
+ * Regenerate Gemini AI recommendations for a product
+ * @param {String} productId - Product ID
+ */
+export const regenerateGeminiOptimizations = async (productId) => {
+  try {
+    const response = await apiClient.post(`/optimizations/${productId}/gemini/regenerate`);
+    return response.data;
+  } catch (error) {
+    console.error('Error regenerating Gemini optimizations:', error);
+    throw error;
+  }
+};
+
+/**
+ * Get optimization insights from the optimization engine
+ * Uses the dedicated /api/optimizations endpoint
+ */
+export const getOptimisationInsights = async () => {
+  try {
+    const response = await apiClient.get('/optimizations');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching optimization insights:', error);
+    if (error.response?.status === 404) {
+      return { success: true, data: [] };
+    }
     throw error;
   }
 };

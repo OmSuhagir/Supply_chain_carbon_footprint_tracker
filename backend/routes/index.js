@@ -26,6 +26,7 @@ router.use('/analysis', analysisRoutes);
 
 // Optimization routes
 router.use('/optimizations', optimizationRoutes);
+router.use('/optimization', optimizationRoutes); // Alias for singular endpoint
 
 // Net-zero progress routes
 router.use('/netzero-progress', netZeroProgressRoutes);

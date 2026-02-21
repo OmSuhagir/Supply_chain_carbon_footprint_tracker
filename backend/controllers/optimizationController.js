@@ -231,6 +231,68 @@ const deleteOptimization = async (req, res) => {
   }
 };
 
+/**
+ * Get Gemini AI-generated optimizations for a product
+ * GET /api/optimizations/:productId/gemini
+ */
+const getGeminiOptimizationsByProduct = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    console.log(`[Gemini Optimization] Fetching Gemini optimizations for product: ${productId}`);
+
+    const { getGeminiOptimizations } = require('../services/geminiOptimizationService');
+    const result = await getGeminiOptimizations(productId);
+
+    res.status(200).json({
+      success: true,
+      message: 'Gemini optimizations retrieved successfully',
+      data: result.data,
+      count: result.count,
+      source: 'gemini-ai',
+    });
+  } catch (error) {
+    console.error(`[Gemini Optimization] Error fetching optimizations:`, error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to retrieve Gemini optimizations',
+      error: error.message,
+    });
+  }
+};
+
+/**
+ * Regenerate Gemini AI recommendations (clear old and generate fresh)
+ * POST /api/optimizations/:productId/gemini/regenerate
+ */
+const regenerateGeminiOptimizations = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    console.log(`[Gemini Optimization] Regenerating recommendations for product: ${productId}`);
+
+    const { regenerateGeminiOptimizations } = require('../services/geminiOptimizationService');
+    const result = await regenerateGeminiOptimizations(productId);
+
+    console.log(`[Gemini Optimization] Regenerated ${result.count} recommendations`);
+
+    res.status(201).json({
+      success: true,
+      message: `Regenerated ${result.count} AI-powered optimization recommendations`,
+      data: result.data,
+      count: result.count,
+      source: 'gemini-ai',
+    });
+  } catch (error) {
+    console.error(`[Gemini Optimization] Error regenerating recommendations:`, error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to regenerate recommendations',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createOptimization,
   generateRecommendations,
@@ -238,4 +300,6 @@ module.exports = {
   getOptimizationById,
   updateOptimization,
   deleteOptimization,
+  getGeminiOptimizationsByProduct,
+  regenerateGeminiOptimizations,
 };

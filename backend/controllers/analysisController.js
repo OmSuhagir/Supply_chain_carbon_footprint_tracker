@@ -1,6 +1,6 @@
 const { EmissionResult } = require('../models/schemas');
 const { calculateEmissions, getLatestEmissionResult } = require('../services/analysisService');
-const { generateOptimizations } = require('../services/optimizationService');
+const { generateGeminiOptimizations } = require('../services/geminiOptimizationService');
 
 /**
  * Run analysis for a product
@@ -25,13 +25,14 @@ const runAnalysis = async (req, res) => {
     console.log(`[Analysis] Completed successfully for product: ${productId}`);
     console.log(`[Analysis] Result:`, JSON.stringify(analysisResult.emissionResult, null, 2));
 
-    // Generate optimization recommendations
+    // Generate optimization recommendations using Gemini AI
     try {
-      console.log(`[Analysis] Generating optimization recommendations...`);
-      await generateOptimizations(productId);
-      console.log(`[Analysis] Optimizations generated successfully`);
+      console.log(`[Analysis] Generating AI-powered optimization recommendations using Gemini...`);
+      await generateGeminiOptimizations(productId, analysisResult.emissionResult);
+      console.log(`[Analysis] Gemini optimizations generated successfully`);
     } catch (optErr) {
-      console.error(`[Analysis] Error generating optimizations (non-blocking):`, optErr.message);
+      console.error(`[Analysis] Error generating Gemini optimizations (non-blocking):`, optErr.message);
+      // Non-blocking: optimization errors don't fail the analysis
     }
 
     res.status(201).json({

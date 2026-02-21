@@ -7,9 +7,11 @@ A comprehensive hackathon-winning platform that helps companies track, analyze, 
 ## Quick Links
 
 - 📖 [Complete Integration Guide](./COMPLETE_INTEGRATION_GUIDE.md)
+- 🤖 [Gemini AI Setup](./GEMINI_SETUP_GUIDE.md) ⭐ **Required for AI recommendations**
 - 🎨 [Frontend Setup Guide](./frontend/FRONTEND_SETUP_GUIDE.md)
 - 🔧 [Backend README](./backend/README.md)
 - 🐍 [Python Engine Docs](./backend/emission_engine/README.md)
+- 💡 [Gemini AI Integration Details](./GEMINI_AI_INTEGRATION.md)
 
 ## 🎯 What Makes CarbonChain Pro Different
 

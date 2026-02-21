@@ -1,14 +1,37 @@
 /**
  * Add Supply Chain Node Page
  * Form to add supply chain stages/nodes to a product
+ * Now includes route tracking with Maharashtra city locations
  */
 
-import { useState } from 'react';
-import { addSupplyChainNode } from '../services/api';
+import { useState, useEffect } from 'react';
+import { addSupplyChainNode, analyzeRouteIntelligence } from '../services/api';
 
 const STAGES = ['Raw Materials', 'Manufacturing', 'Logistics', 'Packaging', 'Distribution', 'End-of-Life'];
 const TRANSPORT_MODES = ['truck', 'rail', 'ship', 'air'];
 const ENERGY_SOURCES = ['coal', 'solar', 'wind', 'gas', 'diesel', 'petrol'];
+
+// Maharashtra cities with logistics infrastructure
+const MAHARASHTRA_CITIES = [
+  'Aurangabad',
+  'Chhatrapati Sambhajinagar',
+  'Nashik',
+  'Pune',
+  'Mumbai',
+  'Thane',
+  'Kolhapur',
+  'Solapur',
+  'Buldhana',
+  'Parbhani',
+  'Sangli',
+  'Satara',
+  'Sindhdurg',
+  'Raigad',
+  'Jalgaon',
+  'Nagpur',
+  'Akola',
+  'Amravati',
+];
 
 const EMISSION_FACTORS = {
   truck: 0.12,
@@ -26,10 +49,38 @@ export function AddSupplyChainNodePage({ productId, onNodeAdded, onCancel }) {
     energySource: ENERGY_SOURCES[0],
     transportCost: 0,
     transportTimeDays: 1,
+    fromLocation: 'Pune',
+    toLocation: 'Mumbai',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [routeAnalysis, setRouteAnalysis] = useState(null);
+  const [analyzingRoute, setAnalyzingRoute] = useState(false);
+
+  // Auto-analyze route when locations change
+  useEffect(() => {
+    if (formData.fromLocation && formData.toLocation && formData.fromLocation !== formData.toLocation) {
+      analyzeRoute();
+    }
+  }, [formData.fromLocation, formData.toLocation]);
+
+  const analyzeRoute = async () => {
+    try {
+      setAnalyzingRoute(true);
+      const analysis = await analyzeRouteIntelligence({
+        productId,
+        fromLocation: formData.fromLocation,
+        toLocation: formData.toLocation,
+      });
+      setRouteAnalysis(analysis.data);
+    } catch (err) {
+      console.error('Route analysis error:', err);
+      setRouteAnalysis(null);
+    } finally {
+      setAnalyzingRoute(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -69,8 +120,11 @@ export function AddSupplyChainNodePage({ productId, onNodeAdded, onCancel }) {
             energySource: ENERGY_SOURCES[0],
             transportCost: 0,
             transportTimeDays: 1,
+            fromLocation: 'Pune',
+            toLocation: 'Mumbai',
           });
           setSuccess(false);
+          setRouteAnalysis(null);
         }, 2000);
       }
     } catch (err) {
@@ -120,6 +174,102 @@ export function AddSupplyChainNodePage({ productId, onNodeAdded, onCancel }) {
             className="w-full bg-primary-darker border border-border-color rounded-lg px-4 py-3 text-text-primary placeholder-text-secondary focus:outline-none focus:border-accent-emerald focus:ring-1 focus:ring-accent-emerald"
           />
         </div>
+
+        {/* Route Information - From Location */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block text-text-primary text-sm font-semibold mb-2">
+              From Location (Maharashtra) *
+            </label>
+            <select
+              name="fromLocation"
+              value={formData.fromLocation}
+              onChange={handleChange}
+              className="w-full bg-primary-darker border border-border-color rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:border-accent-emerald focus:ring-1 focus:ring-accent-emerald"
+            >
+              {MAHARASHTRA_CITIES.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Route Information - To Location */}
+          <div>
+            <label className="block text-text-primary text-sm font-semibold mb-2">
+              To Location (Maharashtra) *
+            </label>
+            <select
+              name="toLocation"
+              value={formData.toLocation}
+              onChange={handleChange}
+              className="w-full bg-primary-darker border border-border-color rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:border-accent-emerald focus:ring-1 focus:ring-accent-emerald"
+            >
+              {MAHARASHTRA_CITIES.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Route Analysis Display */}
+        {analyzingRoute && (
+          <div className="p-4 bg-accent-emerald bg-opacity-10 border border-accent-emerald rounded-lg">
+            <p className="text-text-secondary text-sm">
+              🔍 Analyzing route intelligence...
+            </p>
+          </div>
+        )}
+
+        {routeAnalysis && (
+          <div className="p-4 bg-accent-teal bg-opacity-10 border border-accent-teal rounded-lg">
+            <div className="mb-3">
+              <h4 className="text-text-primary font-semibold mb-2">📍 Route Intelligence</h4>
+              <p className="text-text-secondary text-sm mb-3">{routeAnalysis.routeDetails}</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-3 mb-3">
+              {routeAnalysis.fromHasSeaway && (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-accent-emerald">✓</span>
+                  <span className="text-text-secondary">Seaway access from origin</span>
+                </div>
+              )}
+              {routeAnalysis.fromHasAirport && (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-accent-emerald">✓</span>
+                  <span className="text-text-secondary">Airport near origin</span>
+                </div>
+              )}
+              {routeAnalysis.toHasSeaway && (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-accent-emerald">✓</span>
+                  <span className="text-text-secondary">Seaway access at destination</span>
+                </div>
+              )}
+              {routeAnalysis.toHasAirport && (
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-accent-emerald">✓</span>
+                  <span className="text-text-secondary">Airport near destination</span>
+                </div>
+              )}
+            </div>
+
+            {routeAnalysis.greenOpportunities && routeAnalysis.greenOpportunities.length > 0 && (
+              <div>
+                <p className="text-text-secondary text-xs font-semibold mb-2">🌱 Green Transport Options:</p>
+                <ul className="text-text-secondary text-xs space-y-1">
+                  {routeAnalysis.greenOpportunities.slice(0, 3).map((opp, idx) => (
+                    <li key={idx}>• {opp}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Transport Mode */}
         <div>
@@ -217,8 +367,8 @@ export function AddSupplyChainNodePage({ productId, onNodeAdded, onCancel }) {
 
         {/* Error Message */}
         {error && (
-          <div className="p-4 bg-danger-red bg-opacity-10 border border-danger-red rounded-lg">
-            <p className="text-danger-red text-sm">{error}</p>
+          <div className="p-4 bg-error-red bg-opacity-10 border border-error-red rounded-lg">
+            <p className="text-error-red text-sm">{error}</p>
           </div>
         )}
 

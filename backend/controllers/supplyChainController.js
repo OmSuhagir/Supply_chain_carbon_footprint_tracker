@@ -1,4 +1,5 @@
 const { SupplyChainNode } = require('../models/schemas');
+const { analyzeRouteIntelligence } = require('../services/geminiOptimizationService');
 
 /**
  * Create a supply chain node
@@ -15,6 +16,8 @@ const createSupplyChainNode = async (req, res) => {
       energySource,
       transportCost,
       transportTimeDays,
+      fromLocation,
+      toLocation,
     } = req.body;
 
     // Validate required fields
@@ -35,10 +38,29 @@ const createSupplyChainNode = async (req, res) => {
       energySource,
       transportCost,
       transportTimeDays,
+      fromLocation: fromLocation || '',
+      toLocation: toLocation || '',
     });
 
     await node.save();
     await node.populate('productId');
+
+    // If route locations are provided, analyze the route
+    if (fromLocation && toLocation) {
+      try {
+        const routeAnalysis = await analyzeRouteIntelligence(fromLocation, toLocation);
+        
+        // Update node with route analysis
+        node.hasSeaway = routeAnalysis.fromHasSeaway || routeAnalysis.toHasSeaway;
+        node.hasAirport = routeAnalysis.fromHasAirport || routeAnalysis.toHasAirport;
+        node.routeDetails = routeAnalysis.routeDetails;
+        
+        await node.save();
+      } catch (routeErr) {
+        console.error('Route analysis error (non-blocking):', routeErr.message);
+        // Non-blocking: route analysis errors don't fail node creation
+      }
+    }
 
     res.status(201).json({
       success: true,
@@ -197,10 +219,58 @@ const deleteSupplyChainNode = async (req, res) => {
   }
 };
 
+/**
+ * Analyze route intelligence for Maharashtra cities
+ * POST /api/supply-chain/route/analyze
+ */
+const analyzeRoute = async (req, res) => {
+  try {
+    const { productId, fromLocation, toLocation } = req.body;
+
+    if (!productId || !fromLocation || !toLocation) {
+      return res.status(400).json({
+        success: false,
+        message: 'Product ID, fromLocation, and toLocation are required',
+      });
+    }
+
+    // Call Gemini service to analyze route
+    const routeAnalysis = await analyzeRouteIntelligence(fromLocation, toLocation);
+
+    // Update the supply chain node with route information if node ID is provided
+    if (req.body.nodeId) {
+      const node = await SupplyChainNode.findByIdAndUpdate(
+        req.body.nodeId,
+        {
+          fromLocation,
+          toLocation,
+          hasSeaway: routeAnalysis.fromHasSeaway || routeAnalysis.toHasSeaway,
+          hasAirport: routeAnalysis.fromHasAirport || routeAnalysis.toHasAirport,
+          routeDetails: routeAnalysis.routeDetails,
+        },
+        { new: true }
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Route analysis completed successfully',
+      data: routeAnalysis,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Route analysis failed',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createSupplyChainNode,
   getSupplyChainByProduct,
   getSupplyChainNodeById,
   updateSupplyChainNode,
   deleteSupplyChainNode,
+  analyzeRoute,
 };

@@ -117,6 +117,28 @@ const supplyChainNodeSchema = new mongoose.Schema({
   emission: {
     type: Number,
   },
+  // Route origin - Maharashtra city or location
+  fromLocation: {
+    type: String,
+  },
+  // Route destination - Maharashtra city or location
+  toLocation: {
+    type: String,
+  },
+  // Whether route has maritime/seaway access
+  hasSeaway: {
+    type: Boolean,
+    default: false,
+  },
+  // Whether route has airport/airfreight access
+  hasAirport: {
+    type: Boolean,
+    default: false,
+  },
+  // Route details from Gemini analysis
+  routeDetails: {
+    type: String,
+  },
 }, { timestamps: true });
 
 // ============================================================
@@ -179,34 +201,76 @@ const optimizationInsightSchema = new mongoose.Schema({
   stageName: {
     type: String,
   },
-  // Current transport mode
+  // Type of recommendation generated
+  recommendationType: {
+    type: String,
+    enum: ['transport', 'energy', 'network', 'packaging', 'other'],
+    default: 'transport',
+  },
+  // Current state (for Gemini-generated)
+  currentState: {
+    type: String,
+  },
+  // Suggested improvement (for Gemini-generated)
+  suggestedImprovement: {
+    type: String,
+  },
+  // Current transport mode (legacy)
   currentTransport: {
     type: String,
   },
-  // Suggested transport mode
+  // Suggested transport mode (legacy)
   suggestedTransport: {
     type: String,
   },
-  // Estimated CO2 savings in kg
+  // Carbon reduction percentage (Gemini)
+  carbonReductionPercent: {
+    type: Number,
+  },
+  // Estimated CO2 savings in kg (legacy)
   carbonSaved: {
     type: Number,
   },
-  // Estimated cost savings in currency units
+  // Cost impact in INR (Gemini)
+  costImpactINR: {
+    type: Number,
+  },
+  // Estimated cost savings in currency units (legacy)
   costSaved: {
     type: Number,
   },
-  // Time impact in days (negative = faster, positive = slower)
+  // Time impact in days
   timeImpactDays: {
     type: Number,
   },
-  // Risk level of implementing this recommendation
+  // Implementation difficulty
+  implementationDifficulty: {
+    type: String,
+    enum: ['low', 'medium', 'high'],
+    default: 'medium',
+  },
+  // Risk level of implementing this recommendation (legacy)
   riskLevel: {
     type: String,
     enum: ['low', 'medium', 'high'],
   },
+  // Maharashtra-specific notes (Gemini)
+  maharashtraSpecificNotes: {
+    type: String,
+  },
+  // Explanation of why this approach (Gemini)
+  whyThisApproach: {
+    type: String,
+  },
   // Detailed recommendation text
   recommendationText: {
     type: String,
+  },
+  // Source of recommendation (gemini-ai or manual)
+  generatedBy: {
+    type: String,
+    enum: ['gemini-ai', 'manual'],
+    default: 'manual',
   },
 }, { timestamps: true });
 

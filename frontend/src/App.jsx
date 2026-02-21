@@ -14,6 +14,8 @@ import {
   runAnalysis,
   getAnalysisResult,
   getOptimizations,
+  getGeminiOptimizations,
+  regenerateGeminiOptimizations,
   healthCheck,
 } from './services/api';
 import './App.css';
@@ -40,6 +42,7 @@ function App() {
   // Analysis results
   const [analysisResult, setAnalysisResult] = useState(null);
   const [optimizations, setOptimizations] = useState([]);
+  const [geminiOptimizations, setGeminiOptimizations] = useState([]);
 
   // Loading states
   const [loading, setLoading] = useState(false);
@@ -121,13 +124,22 @@ function App() {
         setAnalysisResult(null);
       }
 
-      // Load optimizations
+      // Load traditional optimizations
       try {
         const optimizationsData = await getOptimizations(selectedProduct._id);
         setOptimizations(optimizationsData?.data || []);
       } catch (optErr) {
         // No optimizations available yet
         setOptimizations([]);
+      }
+
+      // Load Gemini AI optimizations
+      try {
+        const geminiData = await getGeminiOptimizations(selectedProduct._id);
+        setGeminiOptimizations(geminiData?.data || []);
+      } catch (gemErr) {
+        // No Gemini optimizations yet
+        setGeminiOptimizations([]);
       }
     } catch (err) {
       console.error('Error loading product data:', err);
@@ -155,9 +167,18 @@ function App() {
       const result = await runAnalysis(selectedProduct._id);
       setAnalysisResult(result);
 
-      // Refresh optimizations
+      // Refresh traditional optimizations
       const optimizationsData = await getOptimizations(selectedProduct._id);
       setOptimizations(optimizationsData.data || []);
+
+      // Fetch Gemini AI optimizations
+      try {
+        const geminiData = await getGeminiOptimizations(selectedProduct._id);
+        setGeminiOptimizations(geminiData.data || []);
+      } catch (gemErr) {
+        console.error('Error fetching Gemini optimizations:', gemErr);
+        setGeminiOptimizations([]);
+      }
 
       setCurrentPage(PAGES.DASHBOARD);
     } catch (err) {
@@ -372,7 +393,20 @@ function App() {
             analysisResult={analysisResult}
             nodes={supplyChainNodes}
             optimizations={optimizations}
+            geminiOptimizations={geminiOptimizations}
             loading={loading}
+            onRegenerateOptimizations={async () => {
+              if (!selectedProduct) return;
+              try {
+                setLoading(true);
+                const result = await regenerateGeminiOptimizations(selectedProduct._id);
+                setGeminiOptimizations(result.data || []);
+              } catch (err) {
+                setError('Failed to regenerate optimizations: ' + err.message);
+              } finally {
+                setLoading(false);
+              }
+            }}
           />
         )}
 

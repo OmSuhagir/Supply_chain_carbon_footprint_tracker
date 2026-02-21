@@ -6,10 +6,14 @@ const {
   getSupplyChainNodeById,
   updateSupplyChainNode,
   deleteSupplyChainNode,
+  analyzeRoute,
 } = require('../controllers/supplyChainController');
 
 // POST - Create a supply chain node
 router.post('/', createSupplyChainNode);
+
+// POST - Analyze route intelligence
+router.post('/route/analyze', analyzeRoute);
 
 // GET - Get all supply chain nodes for a product
 router.get('/product/:productId', getSupplyChainByProduct);
