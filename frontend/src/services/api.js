@@ -5,8 +5,12 @@ import axios from 'axios';
  * Centralized API communication with backend
  */
 
-// Base API URL - connects to Node.js backend
-const API_BASE_URL = 'http://localhost:5000/api';
+// Base API URL - works with both local dev and Vercel production
+const API_BASE_URL = 
+  import.meta.env.VITE_API_BASE_URL || 
+  (typeof window !== 'undefined' && window.location.hostname === 'localhost' 
+    ? 'http://localhost:5000/api' 
+    : '/api');
 
 // Create axios instance with default config
 const apiClient = axios.create({

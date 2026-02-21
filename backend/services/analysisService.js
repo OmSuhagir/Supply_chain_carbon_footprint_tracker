@@ -174,10 +174,11 @@ const calculateEmissions = async (productId) => {
     // CALL PYTHON EMISSION ENGINE
     // =============================
     let pythonResponse;
+    const PYTHON_BACKEND_URL = process.env.PYTHON_BACKEND_URL || 'http://localhost:8000';
 
     try {
       pythonResponse = await axios.post(
-        'http://127.0.0.1:8000/api/emissions/calculate-total',
+        PYTHON_BACKEND_URL + '/api/emissions/calculate-total',
         {
           supply_chain_nodes: supplyChainData,
         },
@@ -194,7 +195,7 @@ const calculateEmissions = async (productId) => {
       console.error('❌ Python Engine Error:', {
         message: pythonError.message,
         code: pythonError.code,
-        url: 'http://127.0.0.1:8000/api/emissions/calculate-total',
+        url: PYTHON_BACKEND_URL + '/api/emissions/calculate-total',
       });
 
       throw new Error(

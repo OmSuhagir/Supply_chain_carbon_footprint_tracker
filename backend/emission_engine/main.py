@@ -43,10 +43,16 @@ app = FastAPI(
 # =====================
 # CORS CONFIGURATION
 # =====================
-# Allow requests from React frontend on localhost:5173 (Vite default)
+import os
+# Get allowed origins from environment or use defaults for local dev
+ALLOWED_ORIGINS = os.getenv(
+    'ALLOWED_ORIGINS',
+    'http://localhost:5173,http://localhost:3000,http://localhost:3001'
+).split(',')
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000", "http://localhost:3001"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -225,7 +231,8 @@ async def calculate_total_emission(request: EmissionRequest = None, product_id: 
 
         # Send analysis result to Node.js server
         try:
-            nodejs_url = "http://localhost:5000/api/analysis/receive-analysis"
+            NODE_BACKEND_URL = os.getenv('NODE_BACKEND_URL', 'http://localhost:5000')
+            nodejs_url = NODE_BACKEND_URL + "/api/analysis/receive-analysis"
             requests.post(nodejs_url, json={"product_id": product_id, "analysis_result": result})
         except Exception as send_err:
             print(f"Failed to send analysis to Node.js: {send_err}")
