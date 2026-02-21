@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   createOptimization,
+  generateRecommendations,
   getOptimizationByProduct,
   getOptimizationById,
   updateOptimization,
@@ -11,7 +12,10 @@ const {
 // POST - Create optimization insight
 router.post('/', createOptimization);
 
-// GET - Get all optimization insights for a product (matches frontend call: /api/optimization/:productId)
+// POST - Generate optimization recommendations for a product
+router.post('/:productId/generate', generateRecommendations);
+
+// GET - Get all optimization insights for a product
 router.get('/:productId', getOptimizationByProduct);
 
 // PUT - Update optimization insight

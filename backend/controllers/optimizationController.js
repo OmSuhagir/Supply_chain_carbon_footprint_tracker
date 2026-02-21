@@ -1,4 +1,5 @@
 const { OptimizationInsight } = require('../models/schemas');
+const { generateOptimizations, getOptimizations } = require('../services/optimizationService');
 
 /**
  * Create an optimization insight
@@ -57,27 +58,58 @@ const createOptimization = async (req, res) => {
 };
 
 /**
+ * Generate optimization recommendations for a product
+ * POST /api/optimizations/:productId/generate
+ */
+const generateRecommendations = async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    console.log(`[Optimization] Generating recommendations for product: ${productId}`);
+
+    const result = await generateOptimizations(productId);
+
+    console.log(`[Optimization] Generated ${result.count} recommendations`);
+
+    res.status(201).json({
+      success: true,
+      message: `Generated ${result.count} optimization recommendations`,
+      data: result.data,
+      count: result.count,
+    });
+  } catch (error) {
+    console.error(`[Optimization] Error generating recommendations:`, error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to generate recommendations',
+      error: error.message,
+    });
+  }
+};
+
+/**
  * Get all optimization insights for a product
- * GET /api/optimization/product/:productId
+ * GET /api/optimizations/:productId
  */
 const getOptimizationByProduct = async (req, res) => {
   try {
     const { productId } = req.params;
 
-    const insights = await OptimizationInsight.find({ productId })
-      .populate('productId')
-      .sort({ createdAt: -1 });
+    console.log(`[Optimization] Fetching optimizations for product: ${productId}`);
+
+    const result = await getOptimizations(productId);
 
     res.status(200).json({
       success: true,
-      message: 'Optimization insights retrieved successfully',
-      data: insights,
-      count: insights.length,
+      message: 'Optimizations retrieved successfully',
+      data: result.data,
+      count: result.count,
     });
   } catch (error) {
+    console.error(`[Optimization] Error fetching optimizations:`, error.message);
     res.status(500).json({
       success: false,
-      message: 'Server error',
+      message: 'Failed to retrieve optimizations',
       error: error.message,
     });
   }
@@ -201,6 +233,7 @@ const deleteOptimization = async (req, res) => {
 
 module.exports = {
   createOptimization,
+  generateRecommendations,
   getOptimizationByProduct,
   getOptimizationById,
   updateOptimization,

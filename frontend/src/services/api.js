@@ -259,7 +259,7 @@ export const getAnalysisHistory = async (productId) => {
  */
 export const getOptimizations = async (productId) => {
   try {
-    const response = await apiClient.get(`/optimization/${productId}`);
+    const response = await apiClient.get(`/optimizations/${productId}`);
     return response.data;
   } catch (error) {
     // If 404, it means no optimizations exist yet - this is normal for new products
@@ -277,7 +277,7 @@ export const getOptimizations = async (productId) => {
  */
 export const createOptimization = async (optimizationData) => {
   try {
-    const response = await apiClient.post('/optimization', optimizationData);
+    const response = await apiClient.post('/optimizations', optimizationData);
     return response.data;
   } catch (error) {
     console.error('Error creating optimization:', error);

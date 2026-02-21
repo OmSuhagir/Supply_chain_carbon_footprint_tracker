@@ -61,18 +61,21 @@ function CustomLabel(props) {
 }
 
 export function EmissionsBarChart({ nodes = [] }) {
-  // Prepare data - group by stage
+  // Prepare data - group by stage, handle both formats
   const stageMap = {};
   let maxEmission = 0;
   let totalEmission = 0;
 
   nodes.forEach((node) => {
-    const stage = node.stageName || 'Unknown';
+    // Support both camelCase (from DB) and snake_case (from Python)
+    const stage = node.stageName || node.stage_name || node.stage || 'Unknown';
+    const emission = node.emission || node.total_emission || 0;
+    
     if (!stageMap[stage]) {
       stageMap[stage] = { stage, emission: 0 };
     }
-    stageMap[stage].emission += node.emission || 0;
-    totalEmission += node.emission || 0;
+    stageMap[stage].emission += emission;
+    totalEmission += emission;
     maxEmission = Math.max(maxEmission, stageMap[stage].emission);
   });
 

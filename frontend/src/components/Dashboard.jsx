@@ -31,6 +31,16 @@ export function Dashboard({
   useEffect(() => {
     if (analysisResult?.data) {
       setDashboardData(analysisResult.data);
+    } else if (analysisResult?.success && !analysisResult?.data) {
+      // No analysis yet - show defaults
+      setDashboardData({
+        totalEmission: 0,
+        highestEmissionStage: 'N/A',
+        carbonEfficiencyScore: 0,
+        costEfficiencyScore: 0,
+        timeEfficiencyScore: 0,
+        netZeroAlignmentPercentage: 0,
+      });
     }
   }, [analysisResult]);
 
@@ -60,7 +70,7 @@ export function Dashboard({
           </div>
         )}
 
-        {!loading && product && analysisResult && (
+        {!loading && product && (
           <>
             {/* Product Info Banner */}
             <div className="mb-8 card-base border-accent-teal">
@@ -129,7 +139,7 @@ export function Dashboard({
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Emissions By Stage */}
                 <div>
-                  <EmissionsBarChart nodes={nodes} />
+                  <EmissionsBarChart nodes={analysisResult?.data?.nodesBreakdown || nodes} />
                 </div>
 
                 {/* Emission Breakdown Pie */}
@@ -147,7 +157,7 @@ export function Dashboard({
               {/* Optimization Recommendations */}
               <OptimizationPanel
                 optimizations={optimizations}
-                hasOptimizations={true}
+                hasOptimizations={optimizations.length > 0}
               />
             </div>
 

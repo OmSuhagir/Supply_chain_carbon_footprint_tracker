@@ -21,29 +21,33 @@ import { formatEmission } from '../utils/formatting';
 function generateForecastData(currentEmission, monthsAhead = 6) {
   const historyData = [];
   const currentDate = new Date();
+  
+  // If current emission is 0 or very low, use defaults
+  const baseEmission = Math.max(currentEmission, 0.1);
 
-  // Generate historical data (past 6 months)
+  // Generate historical data (past 6 months) showing downward trend
   for (let i = 5; i >= 0; i--) {
     const date = new Date(currentDate);
     date.setMonth(date.getMonth() - i);
+    // Show trend of reducing emissions over time
+    const trend = 1 + (i * 0.05); // 5% increase per step going backwards
     historyData.push({
       month: date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
-      emission: Math.max(
-        currentEmission * 0.85 + Math.random() * currentEmission * 0.3,
-        0
-      ),
+      emission: Math.max(baseEmission * trend, 0),
       isForecast: false,
     });
   }
 
-  // Generate forecast data (next 6 months)
+  // Generate forecast data (next 6 months) - optimistic reduction
   const forecastData = [];
   for (let i = 1; i <= monthsAhead; i++) {
     const date = new Date(currentDate);
     date.setMonth(date.getMonth() + i);
+    // Show gradual reduction (3% per month improvement)
+    const reductionFactor = Math.pow(0.97, i);
     forecastData.push({
       month: date.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
-      emission: currentEmission * (0.95 ** i), // Slight reduction trend
+      emission: Math.max(baseEmission * reductionFactor, 0),
       isForecast: true,
     });
   }

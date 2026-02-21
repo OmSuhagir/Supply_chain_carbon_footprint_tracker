@@ -1,5 +1,6 @@
 const { EmissionResult } = require('../models/schemas');
 const { calculateEmissions, getLatestEmissionResult } = require('../services/analysisService');
+const { generateOptimizations } = require('../services/optimizationService');
 
 /**
  * Run analysis for a product
@@ -23,6 +24,15 @@ const runAnalysis = async (req, res) => {
 
     console.log(`[Analysis] Completed successfully for product: ${productId}`);
     console.log(`[Analysis] Result:`, JSON.stringify(analysisResult.emissionResult, null, 2));
+
+    // Generate optimization recommendations
+    try {
+      console.log(`[Analysis] Generating optimization recommendations...`);
+      await generateOptimizations(productId);
+      console.log(`[Analysis] Optimizations generated successfully`);
+    } catch (optErr) {
+      console.error(`[Analysis] Error generating optimizations (non-blocking):`, optErr.message);
+    }
 
     res.status(201).json({
       success: true,

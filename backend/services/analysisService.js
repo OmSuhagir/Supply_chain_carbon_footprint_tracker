@@ -48,10 +48,27 @@ const calculateEmissions = async (productId) => {
       nodes_breakdown,
     } = emissionData;
 
-    // Calculate efficiency scores (can be done here or by Python)
-    const carbonEfficiencyScore = Math.max(0, 100 - (total_emission / 50000) * 100);
-    const costEfficiencyScore = 85; // Placeholder
-    const timeEfficiencyScore = 90; // Placeholder
+    // Calculate efficiency scores using real node data
+    let totalCost = 0;
+    let totalTime = 0;
+    
+    supplyChainData.forEach((node) => {
+      totalCost += node.transport_cost || 0;
+      totalTime += node.transport_time_days || 0;
+    });
+
+    // Carbon efficiency: 100 - (emission / baseline) * 100
+    // Baseline: 10 tCO2e per node (normalized threshold)
+    const carbonBaseline = nodes.length * 10; // 10 tCO2e per stage as baseline
+    const carbonEfficiencyScore = Math.max(0, Math.min(100, 100 - (total_emission / carbonBaseline * 100)));
+    
+    // Cost efficiency based on average cost per km
+    const avgCostPerKm = totalCost > 0 ? totalCost / supplyChainData.reduce((sum, n) => sum + (n.distance_km || 0), 0) : 0;
+    const costEfficiencyScore = Math.max(0, Math.min(100, 100 - (avgCostPerKm / 5) * 100)); // $5/km is baseline
+    
+    // Time efficiency based on average delivery days
+    const avgTimePerNode = totalTime / nodes.length;
+    const timeEfficiencyScore = Math.max(0, Math.min(100, 100 - (avgTimePerNode / 30) * 100)); // 30 days is baseline
     
     // Calculate net-zero alignment percentage
     const product = await Product.findById(productId);
@@ -82,9 +99,21 @@ const calculateEmissions = async (productId) => {
     product.carbonEfficiencyScore = carbonEfficiencyScore;
     await product.save();
 
+    // Return full data structure for frontend
     return {
       success: true,
-      emissionResult,
+      emissionResult: {
+        totalEmission: total_emission,
+        highestEmissionStage: highest_emission_stage,
+        carbonEfficiencyScore,
+        costEfficiencyScore,
+        timeEfficiencyScore,
+        netZeroAlignmentPercentage,
+        nodesBreakdown: nodes_breakdown,
+        totalCost: totalCost,
+        totalTime: totalTime,
+        productId: productId,
+      },
       productUpdated: product,
     };
   } catch (error) {

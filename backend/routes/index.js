@@ -25,7 +25,7 @@ router.use('/supply-chain', supplyChainRoutes);
 router.use('/analysis', analysisRoutes);
 
 // Optimization routes
-router.use('/optimization', optimizationRoutes);
+router.use('/optimizations', optimizationRoutes);
 
 // Net-zero progress routes
 router.use('/netzero-progress', netZeroProgressRoutes);

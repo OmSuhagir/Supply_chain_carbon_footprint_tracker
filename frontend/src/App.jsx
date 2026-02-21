@@ -79,6 +79,8 @@ function App() {
   useEffect(() => {
     if (selectedProduct) {
       loadProductData();
+      // Navigate to dashboard to show the loaded data
+      setCurrentPage(PAGES.DASHBOARD);
     }
   }, [selectedProduct]);
 

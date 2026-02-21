@@ -19,14 +19,15 @@ import { formatEmission, getStageColor, getEmissionPercentage } from '../utils/f
 function CustomPieTooltip({ active, payload }) {
   if (active && payload && payload.length) {
     const data = payload[0];
+    const percent = data.percent ? (data.percent * 100).toFixed(1) : '0';
     return (
       <div className="bg-primary-darker border border-accent-emerald rounded-lg p-3 shadow-lg">
-        <p className="text-text-primary font-semibold">{data.payload.stage}</p>
+        <p className="text-text-primary font-semibold">{data.payload?.stage || 'Unknown'}</p>
         <p className="text-accent-emerald">
-          {formatEmission(data.value)}
+          {formatEmission(data.value || 0)}
         </p>
         <p className="text-accent-teal">
-          {data.percent.toFixed(1)}% of total
+          {percent}% of total
         </p>
       </div>
     );
