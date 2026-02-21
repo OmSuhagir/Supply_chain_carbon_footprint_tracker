@@ -1,0 +1,785 @@
+{
+  "info": {
+    "name": "CarbonChain Pro - Logistics Edition",
+    "description": "Complete Postman collection for testing CarbonChain Pro backend with logistics companies",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "Create FedEx",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"FedEx Corporation\",\n  \"industry\": \"Logistics & Courier Services\",\n  \"sustainabilityGoal\": \"Carbon Neutral by 2040\",\n  \"headquartersLocation\": \"Memphis, Tennessee, USA\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/companies",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "companies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create DHL",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"DHL Express\",\n  \"industry\": \"International Logistics\",\n  \"sustainabilityGoal\": \"Net Zero by 2050\",\n  \"headquartersLocation\": \"Bonn, Germany\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/companies",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "companies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Amazon Logistics",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Amazon Logistics\",\n  \"industry\": \"E-commerce & Last-Mile Delivery\",\n  \"sustainabilityGoal\": \"Net Zero by 2040\",\n  \"headquartersLocation\": \"Seattle, Washington, USA\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/companies",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "companies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create UPS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"United Parcel Service (UPS)\",\n  \"industry\": \"Package Delivery & Logistics\",\n  \"sustainabilityGoal\": \"Carbon Neutral by 2050\",\n  \"headquartersLocation\": \"Atlanta, Georgia, USA\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/companies",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "companies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Companies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/companies",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "companies"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Company by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/companies/COMPANY_ID",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "companies",
+                "COMPANY_ID"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create FedEx Domestic Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": \"FEDEX_COMPANY_ID\",\n  \"name\": \"Domestic Package Route A\",\n  \"description\": \"Daily domestic parcel delivery route covering East Coast USA\",\n  \"yearlyNetZeroTarget\": 500000\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/products",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create DHL International Route",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": \"DHL_COMPANY_ID\",\n  \"name\": \"Europe-Asia International Express\",\n  \"description\": \"Express international shipping route from Europe to Asia\",\n  \"yearlyNetZeroTarget\": 750000\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/products",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Amazon Same-Day Delivery",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": \"AMAZON_COMPANY_ID\",\n  \"name\": \"Same-Day Delivery Network\",\n  \"description\": \"Last-mile same-day delivery using electric and hybrid vehicles\",\n  \"yearlyNetZeroTarget\": 300000\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/products",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create UPS Ground Service",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": \"UPS_COMPANY_ID\",\n  \"name\": \"Ground Freight Service\",\n  \"description\": \"Heavy freight ground transportation across North America\",\n  \"yearlyNetZeroTarget\": 1000000\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/products",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "products"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Products by Company",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/products/company/COMPANY_ID",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "products",
+                "company",
+                "COMPANY_ID"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Supply Chain Nodes",
+      "item": [
+        {
+          "name": "Add Node - Origin Hub (FedEx Memphis)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"Origin Hub Processing\",\n  \"supplierName\": \"FedEx Memphis Hub\",\n  \"transportMode\": \"truck\",\n  \"distanceKm\": 0,\n  \"energySource\": \"natural gas\",\n  \"transportCost\": 0,\n  \"transportTimeDays\": 1\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/supply-chain",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "supply-chain"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Node - Regional Hub Transfer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"Regional Hub Transfer\",\n  \"supplierName\": \"FedEx Atlanta Distribution Center\",\n  \"transportMode\": \"truck\",\n  \"distanceKm\": 650,\n  \"energySource\": \"diesel\",\n  \"transportCost\": 8500,\n  \"transportTimeDays\": 2\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/supply-chain",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "supply-chain"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Node - Local Delivery Center",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"Local Delivery Center\",\n  \"supplierName\": \"FedEx New York Local Station\",\n  \"transportMode\": \"truck\",\n  \"distanceKm\": 45,\n  \"energySource\": \"diesel\",\n  \"transportCost\": 1200,\n  \"transportTimeDays\": 1\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/supply-chain",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "supply-chain"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Node - Last-Mile Delivery (Electric)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"Last-Mile Delivery\",\n  \"supplierName\": \"FedEx Courier Network\",\n  \"transportMode\": \"truck\",\n  \"distanceKm\": 15,\n  \"energySource\": \"solar\",\n  \"transportCost\": 150,\n  \"transportTimeDays\": 1\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/supply-chain",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "supply-chain"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Node - International Air Freight",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"International Air Transport\",\n  \"supplierName\": \"DHL Air Freight\",\n  \"transportMode\": \"air\",\n  \"distanceKm\": 8500,\n  \"energySource\": \"jet fuel\",\n  \"transportCost\": 45000,\n  \"transportTimeDays\": 2\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/supply-chain",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "supply-chain"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Node - Rail Transport (Low Emission)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"Cross-Country Rail\",\n  \"supplierName\": \"Union Pacific Railroad\",\n  \"transportMode\": \"rail\",\n  \"distanceKm\": 3000,\n  \"energySource\": \"diesel\",\n  \"transportCost\": 12000,\n  \"transportTimeDays\": 5\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/supply-chain",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "supply-chain"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add Node - Ocean Shipping",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"Ocean Freight Service\",\n  \"supplierName\": \"Maersk Line\",\n  \"transportMode\": \"ship\",\n  \"distanceKm\": 12000,\n  \"energySource\": \"marine fuel\",\n  \"transportCost\": 8000,\n  \"transportTimeDays\": 18\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/supply-chain",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "supply-chain"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Supply Chain by Product",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/supply-chain/product/PRODUCT_ID",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "supply-chain",
+                "product",
+                "PRODUCT_ID"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Analysis",
+      "item": [
+        {
+          "name": "Run Analysis (Calls Python API)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {},
+            "url": {
+              "raw": "{{BASE_URL}}/api/analysis/PRODUCT_ID",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "analysis",
+                "PRODUCT_ID"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Latest Analysis Result",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/analysis/PRODUCT_ID",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "analysis",
+                "PRODUCT_ID"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Analysis History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/analysis/history/PRODUCT_ID",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "analysis",
+                "history",
+                "PRODUCT_ID"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Optimization Insights",
+      "item": [
+        {
+          "name": "Suggest Electric Vehicles",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"Last-Mile Delivery\",\n  \"currentTransport\": \"Diesel Truck\",\n  \"suggestedTransport\": \"Electric Vehicle\",\n  \"carbonSaved\": 2500,\n  \"costSaved\": 5000,\n  \"timeImpactDays\": 0,\n  \"riskLevel\": \"low\",\n  \"recommendationText\": \"Replace diesel delivery trucks with electric vehicles in urban areas. 80% reduction in emissions for last-mile delivery.\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/optimization",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "optimization"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Switch from Air to Rail",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"Regional Transfer\",\n  \"currentTransport\": \"Air Freight\",\n  \"suggestedTransport\": \"Rail Freight\",\n  \"carbonSaved\": 8500,\n  \"costSaved\": 15000,\n  \"timeImpactDays\": 2,\n  \"riskLevel\": \"medium\",\n  \"recommendationText\": \"For non-urgent freight, use rail instead of air. Reduces emissions by 75% with minimal cost difference. Trade-off: 2 days delivery time.\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/optimization",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "optimization"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Optimize Hub Locations",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"Origin Hub Processing\",\n  \"currentTransport\": \"Centralized Memphis Hub\",\n  \"suggestedTransport\": \"Regional Hub Network\",\n  \"carbonSaved\": 12000,\n  \"costSaved\": 8000,\n  \"timeImpactDays\": -1,\n  \"riskLevel\": \"high\",\n  \"recommendationText\": \"Establish regional processing hubs to reduce transportation distance. Increases efficiency by 15% and reduces emissions by 20%.\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/optimization",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "optimization"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Use Ocean Freight Instead of Air",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"stageName\": \"International Transport\",\n  \"currentTransport\": \"Air Freight\",\n  \"suggestedTransport\": \"Ocean Shipping\",\n  \"carbonSaved\": 45000,\n  \"costSaved\": 35000,\n  \"timeImpactDays\": 14,\n  \"riskLevel\": \"medium\",\n  \"recommendationText\": \"For bulk international shipments, switch to ocean freight. Massive emission reduction (90%) with significant cost savings. Recommended for non-urgent shipments.\"\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/optimization",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "optimization"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Optimization Insights",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/optimization/product/PRODUCT_ID",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "optimization",
+                "product",
+                "PRODUCT_ID"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Net Zero Progress",
+      "item": [
+        {
+          "name": "Record 2026 Progress",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"year\": 2026,\n  \"targetEmission\": 500000,\n  \"actualEmission\": 485000,\n  \"alignmentPercentage\": 97.0\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/netzero-progress",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "netzero-progress"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record 2027 Progress",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"year\": 2027,\n  \"targetEmission\": 450000,\n  \"actualEmission\": 420000,\n  \"alignmentPercentage\": 93.3\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/netzero-progress",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "netzero-progress"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Record 2030 Goal Progress",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"PRODUCT_ID\",\n  \"year\": 2030,\n  \"targetEmission\": 250000,\n  \"actualEmission\": 240000,\n  \"alignmentPercentage\": 96.0\n}"
+            },
+            "url": {
+              "raw": "{{BASE_URL}}/api/netzero-progress",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "netzero-progress"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Progress History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/api/netzero-progress/product/PRODUCT_ID",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "api",
+                "netzero-progress",
+                "product",
+                "PRODUCT_ID"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ]
+}

@@ -91,7 +91,7 @@ const supplyChainNodeSchema = new mongoose.Schema({
   // Energy source for transport
   energySource: {
     type: String,
-    enum: ['coal', 'solar', 'wind', 'gas'],
+    enum: ['coal', 'solar', 'wind', 'gas','diesel','petrol'],
   },
   // Transport cost in currency units
   transportCost: {

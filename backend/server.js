@@ -2,14 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const connectDB = require('./config/connectdb');
-const {
-  Company,
-  Product,
-  SupplyChainNode,
-  EmissionResult,
-  OptimizationInsight,
-  NetZeroProgress,
-} = require('./models/schemas');
+const apiRoutes = require('./routes');
 
 // ============================================================
 // INITIALIZATION
@@ -36,8 +29,22 @@ connectDB();
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.status(200).json({
+    success: true,
     message: 'CarbonChain Pro Server is Running',
     timestamp: new Date().toISOString(),
+  });
+});
+
+// API routes
+app.use('/api', apiRoutes);
+
+// Welcome endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'CarbonChain Pro API',
+    version: '1.0.0',
+    description: 'AI-Powered Supply Chain Carbon & Net-Zero Tracker',
   });
 });
 
@@ -48,6 +55,7 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📊 Database: MongoDB`);
   console.log(`🌱 CarbonChain Pro - AI-Powered Supply Chain Carbon & Net-Zero Tracker`);
+  console.log(`📚 API Documentation: http://localhost:${PORT}/api`);
 });
 
 module.exports = app;
