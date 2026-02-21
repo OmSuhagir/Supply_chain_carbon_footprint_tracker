@@ -1,0 +1,289 @@
+{
+  "metadata": {
+    "version": "2.0",
+    "last_updated": "2026-02-21",
+    "organization": "CarbonChain Pro",
+    "units": {
+      "emission": "kg CO2e per unit",
+      "cost": "USD",
+      "distance": "kilometers",
+      "time": "hours",
+      "capacity": "tons"
+    }
+  },
+  
+  "transport_modes": {
+    "truck": {
+      "emission_per_km": 0.12,
+      "emission_per_ton_km": 0.015,
+      "description": "Heavy-duty road transport truck (20-40 tons capacity)",
+      "cost_efficiency": 1.0,
+      "cost_per_km": 1.5,
+      "capacity_tons": 25,
+      "speed_kmh": 80,
+      "reliability_score": 0.85,
+      "flexibility_score": 0.95,
+      "environmental_impact": "high",
+      "fuel_type": "diesel",
+      "availability": "high",
+      "best_for": ["Medium distances", "Time-sensitive", "Flexible routes"]
+    },
+    "rail": {
+      "emission_per_km": 0.04,
+      "emission_per_ton_km": 0.003,
+      "description": "Railway freight (diesel or electric locomotives, 500+ tons per train)",
+      "cost_efficiency": 0.75,
+      "cost_per_km": 1.1,
+      "capacity_tons": 500,
+      "speed_kmh": 100,
+      "reliability_score": 0.90,
+      "flexibility_score": 0.40,
+      "environmental_impact": "low",
+      "fuel_type": "diesel/electric",
+      "availability": "medium",
+      "best_for": ["High volume", "Long distances", "Cost-effective"]
+    },
+    "ship": {
+      "emission_per_km": 0.02,
+      "emission_per_ton_km": 0.0008,
+      "description": "Sea freight (container ships, 10000+ tons capacity)",
+      "cost_efficiency": 0.5,
+      "cost_per_km": 0.75,
+      "capacity_tons": 10000,
+      "speed_kmh": 25,
+      "reliability_score": 0.92,
+      "flexibility_score": 0.20,
+      "environmental_impact": "very_low",
+      "fuel_type": "bunker_fuel/lng",
+      "availability": "medium",
+      "best_for": ["International", "Bulk shipments", "Lowest emissions per ton"]
+    },
+    "air": {
+      "emission_per_km": 0.6,
+      "emission_per_ton_km": 0.12,
+      "description": "Air freight (cargo planes, 50-100 tons capacity)",
+      "cost_efficiency": 2.0,
+      "cost_per_km": 2.5,
+      "capacity_tons": 80,
+      "speed_kmh": 900,
+      "reliability_score": 0.88,
+      "flexibility_score": 0.90,
+      "environmental_impact": "critical",
+      "fuel_type": "jet_fuel",
+      "availability": "high",
+      "best_for": ["Urgent shipments", "High-value goods", "Express delivery"]
+    },
+    "bicycle": {
+      "emission_per_km": 0.0,
+      "emission_per_ton_km": 0.0,
+      "description": "Human-powered bicycle (delivery bikes, 30-50 kg capacity)",
+      "cost_efficiency": 0.1,
+      "cost_per_km": 0.1,
+      "capacity_tons": 0.05,
+      "speed_kmh": 20,
+      "reliability_score": 0.75,
+      "flexibility_score": 1.0,
+      "environmental_impact": "zero",
+      "fuel_type": "human_power",
+      "availability": "high",
+      "best_for": ["Urban delivery", "Last-mile", "Zero emissions"]
+    },
+    "electric_truck": {
+      "emission_per_km": 0.03,
+      "emission_per_ton_km": 0.004,
+      "description": "Electric heavy-duty truck (20-40 tons capacity)",
+      "cost_efficiency": 0.85,
+      "cost_per_km": 1.2,
+      "capacity_tons": 25,
+      "speed_kmh": 80,
+      "reliability_score": 0.82,
+      "flexibility_score": 0.85,
+      "environmental_impact": "low",
+      "fuel_type": "electricity",
+      "availability": "growing",
+      "best_for": ["Regional routes", "Sustainability focus", "Moderate distance"]
+    }
+  },
+
+  "energy_sources": {
+    "coal": {
+      "emission_factor": 0.9,
+      "emission_per_mwh": 820,
+      "description": "Coal-fired power plants (thermal energy from coal combustion)",
+      "renewable": false,
+      "cost_per_mwh": 50,
+      "availability": 0.85,
+      "scalability": "medium",
+      "health_impact": "critical",
+      "decommission_status": "phasing_out",
+      "grid_reliability": 0.90
+    },
+    "gas": {
+      "emission_factor": 0.5,
+      "emission_per_mwh": 450,
+      "description": "Natural gas power plants (fossil fuel with lower emissions than coal)",
+      "renewable": false,
+      "cost_per_mwh": 60,
+      "availability": 0.88,
+      "scalability": "high",
+      "health_impact": "moderate",
+      "decommission_status": "stable",
+      "grid_reliability": 0.92
+    },
+    "solar": {
+      "emission_factor": 0.05,
+      "emission_per_mwh": 45,
+      "description": "Solar photovoltaic and thermal (sun-based renewable energy)",
+      "renewable": true,
+      "cost_per_mwh": 40,
+      "availability": 0.25,
+      "scalability": "very_high",
+      "health_impact": "none",
+      "decommission_status": "expanding",
+      "grid_reliability": 0.70,
+      "intermittency": "high",
+      "peak_hours": "9am-5pm"
+    },
+    "wind": {
+      "emission_factor": 0.02,
+      "emission_per_mwh": 18,
+      "description": "Wind turbines (onshore and offshore wind energy)",
+      "renewable": true,
+      "cost_per_mwh": 45,
+      "availability": 0.35,
+      "scalability": "very_high",
+      "health_impact": "low",
+      "decommission_status": "expanding",
+      "grid_reliability": 0.75,
+      "intermittency": "medium",
+      "best_season": "winter"
+    },
+    "hydro": {
+      "emission_factor": 0.01,
+      "emission_per_mwh": 9,
+      "description": "Hydroelectric dams and run-of-river (water-based renewable energy)",
+      "renewable": true,
+      "cost_per_mwh": 55,
+      "availability": 0.90,
+      "scalability": "medium",
+      "health_impact": "low",
+      "decommission_status": "stable",
+      "grid_reliability": 0.95,
+      "intermittency": "low"
+    },
+    "nuclear": {
+      "emission_factor": 0.08,
+      "emission_per_mwh": 72,
+      "description": "Nuclear fission power plants (zero-carbon but radioactive waste)",
+      "renewable": false,
+      "cost_per_mwh": 75,
+      "availability": 0.92,
+      "scalability": "low",
+      "health_impact": "low",
+      "decommission_status": "stable",
+      "grid_reliability": 0.98,
+      "intermittency": "none"
+    },
+    "geothermal": {
+      "emission_factor": 0.03,
+      "emission_per_mwh": 27,
+      "description": "Geothermal energy from Earth's heat (location-dependent renewable)",
+      "renewable": true,
+      "cost_per_mwh": 65,
+      "availability": 0.85,
+      "scalability": "low",
+      "health_impact": "very_low",
+      "decommission_status": "stable",
+      "grid_reliability": 0.93,
+      "intermittency": "none",
+      "geographic_limitation": "high"
+    }
+  },
+
+  "benchmark_values": {
+    "transport": {
+      "average_truck_emission_per_km": 0.15,
+      "average_transport_cost_per_km": 1.5,
+      "average_transport_time_per_km": 0.05,
+      "average_truck_utilization": 0.65,
+      "industry_standard_emission": 0.18
+    },
+    "energy": {
+      "grid_average_emission_factor": 0.35,
+      "renewable_percentage": 0.28,
+      "grid_avg_cost_per_mwh": 55,
+      "peak_demand_multiplier": 1.3
+    },
+    "operations": {
+      "manufacturing_emission_per_ton": 2.5,
+      "waste_management_emission_per_ton": 0.3,
+      "warehousing_emission_per_month": 0.1
+    }
+  },
+
+  "demand_urgency_factors": {
+    "low": {
+      "multiplier": 0.3,
+      "description": "Non-urgent, flexible timeline",
+      "delivery_days": "14-30",
+      "transport_priority": "cost_optimization"
+    },
+    "medium": {
+      "multiplier": 0.6,
+      "description": "Standard delivery timeline",
+      "delivery_days": "7-14",
+      "transport_priority": "balanced"
+    },
+    "high": {
+      "multiplier": 1.0,
+      "description": "Urgent, time-sensitive",
+      "delivery_days": "3-7",
+      "transport_priority": "speed_focus"
+    },
+    "critical": {
+      "multiplier": 1.5,
+      "description": "Emergency, immediate dispatch",
+      "delivery_days": "0-3",
+      "transport_priority": "speed_critical"
+    }
+  },
+
+  "seasonal_adjustments": {
+    "spring": 1.0,
+    "summer": 1.1,
+    "autumn": 0.95,
+    "winter": 1.2,
+    "description": "Weather and demand variations affecting transport efficiency"
+  },
+
+  "industry_standards": {
+    "automotive": {
+      "emission_intensity": 0.25,
+      "typical_transport_modes": ["truck", "rail"],
+      "avg_annual_emission": 5000
+    },
+    "electronics": {
+      "emission_intensity": 0.15,
+      "typical_transport_modes": ["air", "truck"],
+      "avg_annual_emission": 2000
+    },
+    "food_beverage": {
+      "emission_intensity": 0.35,
+      "typical_transport_modes": ["truck", "ship"],
+      "avg_annual_emission": 8000
+    },
+    "chemicals": {
+      "emission_intensity": 0.45,
+      "typical_transport_modes": ["truck", "rail"],
+      "avg_annual_emission": 12000
+    }
+  },
+
+  "carbon_pricing": {
+    "eu_ets_price_per_ton": 85,
+    "carbon_tax_region_1": 50,
+    "carbon_tax_region_2": 35,
+    "corporate_offset_cost_per_ton": 25,
+    "description": "External carbon costs and pricing mechanisms"
+  }
+}

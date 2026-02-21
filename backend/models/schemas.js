@@ -10,6 +10,18 @@ const companySchema = new mongoose.Schema({
     required: true,
     index: true,
   },
+  // Company email (unique for login)
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    index: true,
+  },
+  // Company password (hashed)
+  password: {
+    type: String,
+    required: true,
+  },
   // Industry sector (e.g., "Manufacturing", "Retail", "Technology")
   industry: {
     type: String,
@@ -141,6 +153,11 @@ const emissionResultSchema = new mongoose.Schema({
   // Percentage alignment with net-zero target
   netZeroAlignmentPercentage: {
     type: Number,
+  },
+  // Detailed breakdown of emissions by node/stage
+  nodesBreakdown: {
+    type: Array,
+    default: [],
   },
   // Date of analysis
   analysisDate: {

@@ -2,12 +2,22 @@ const express = require('express');
 const router = express.Router();
 const {
   createCompany,
+  registerCompany,
+  loginCompany,
   getAllCompanies,
   getCompanyById,
   updateCompany,
   deleteCompany,
 } = require('../controllers/companyController');
 
+// Authentication routes
+// POST - Register a new company
+router.post('/register', registerCompany);
+
+// POST - Login company
+router.post('/login', loginCompany);
+
+// CRUD routes
 // POST - Create a new company
 router.post('/', createCompany);
 

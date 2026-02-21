@@ -1,68 +1,105 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  @apply bg-gradient-hero text-text-primary font-sans;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+::-webkit-scrollbar-track {
+  @apply bg-primary-darker;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+::-webkit-scrollbar-thumb {
+  @apply bg-accent-teal rounded-full hover:bg-accent-emerald;
+}
+
+/* Animations with keyframes */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
   }
-  a:hover {
-    color: #747bff;
+  100% {
+    opacity: 1;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
   }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.3s ease-in-out;
+}
+
+/* Hover effects */
+.hover-lift {
+  @apply transition-all duration-300 hover:scale-105 hover:shadow-glow-emerald;
+}
+
+.hover-lift-amber {
+  @apply transition-all duration-300 hover:scale-105 hover:shadow-glow-amber;
+}
+
+/* Card styles */
+.card-base {
+  @apply bg-card-bg rounded-2xl border border-border-color backdrop-blur-md bg-opacity-80 p-6 shadow-lg;
+}
+
+.card-hover {
+  @apply card-base transition-all duration-300 hover:border-accent-teal hover:shadow-glow-emerald;
+}
+
+/* Glassmorphism effect */
+.glass-effect {
+  @apply bg-opacity-10 backdrop-blur-xl border border-border-color;
+}
+
+/* Badge styles */
+.badge {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.badge-success {
+  @apply badge bg-success-green bg-opacity-20 text-success-green;
+}
+
+.badge-warning {
+  @apply badge bg-warning-amber bg-opacity-20 text-warning-amber;
+}
+
+.badge-danger {
+  @apply badge bg-danger-red bg-opacity-20 text-danger-red;
+}
+
+/* Text utilities */
+.text-gradient {
+  @apply bg-gradient-to-r from-accent-emerald to-accent-teal bg-clip-text text-transparent;
 }

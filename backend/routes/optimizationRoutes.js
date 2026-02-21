@@ -11,11 +11,8 @@ const {
 // POST - Create optimization insight
 router.post('/', createOptimization);
 
-// GET - Get all optimization insights for a product
-router.get('/product/:productId', getOptimizationByProduct);
-
-// GET - Get optimization insight by ID
-router.get('/:id', getOptimizationById);
+// GET - Get all optimization insights for a product (matches frontend call: /api/optimization/:productId)
+router.get('/:productId', getOptimizationByProduct);
 
 // PUT - Update optimization insight
 router.put('/:id', updateOptimization);

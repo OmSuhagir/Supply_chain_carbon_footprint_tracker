@@ -16,8 +16,13 @@ const runAnalysis = async (req, res) => {
       });
     }
 
+    console.log(`[Analysis] Starting analysis for product: ${productId}`);
+
     // Call analysis service
     const analysisResult = await calculateEmissions(productId);
+
+    console.log(`[Analysis] Completed successfully for product: ${productId}`);
+    console.log(`[Analysis] Result:`, JSON.stringify(analysisResult.emissionResult, null, 2));
 
     res.status(201).json({
       success: true,
@@ -25,10 +30,14 @@ const runAnalysis = async (req, res) => {
       data: analysisResult.emissionResult,
     });
   } catch (error) {
+    console.error(`[Analysis] ERROR for product ${req.params.productId}:`, error.message);
+    console.error(`[Analysis] Full error:`, error);
+    
     res.status(500).json({
       success: false,
       message: 'Analysis failed',
       error: error.message,
+      hint: error.message.includes('Python') ? 'Make sure Python engine is running (python main.py in backend/emission_engine)' : 'Check backend logs for details',
     });
   }
 };
@@ -36,6 +45,7 @@ const runAnalysis = async (req, res) => {
 /**
  * Get latest analysis result for a product
  * GET /api/analysis/:productId
+ * Returns 200 with data: null if no analysis exists (expected for new products)
  */
 const getAnalysis = async (req, res) => {
   try {
@@ -50,10 +60,12 @@ const getAnalysis = async (req, res) => {
 
     const result = await getLatestEmissionResult(productId);
 
+    // Return 200 with null data if no analysis exists (expected for new products)
     if (!result) {
-      return res.status(404).json({
-        success: false,
-        message: 'No analysis found for this product',
+      return res.status(200).json({
+        success: true,
+        message: 'No analysis found for this product (expected for new products)',
+        data: null,
       });
     }
 
